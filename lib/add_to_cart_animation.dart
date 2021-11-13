@@ -29,14 +29,15 @@ class AddToCartAnimation extends StatefulWidget {
   final Duration dragToCardDuration;
   final Curve previewCurve;
   final Curve dragToCardCurve;
-  final Function(Future<void> Function(GlobalKey))
-      receiveCreateAddToCardAnimationMethod;
+  final Widget Function(Widget)? buildler;
+  final Function(Future<void> Function(GlobalKey)) receiveCreateAddToCardAnimationMethod;
 
   const AddToCartAnimation({
     Key? key,
     required this.child,
     required this.gkCart,
     required this.receiveCreateAddToCardAnimationMethod,
+    this.buildler,
     this.previewHeight = 30,
     this.previewWidth = 30,
     this.previewDuration = const Duration(milliseconds: 500),
@@ -88,7 +89,7 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
                             ? TweenAnimationBuilder(
                                 tween: Tween<double>(begin: 0, end: pi * 2),
                                 duration: model.duration,
-                                child: model.widget,
+                                child: widget.buildler != null ? widget.buildler!(model.widget) : model.widget,
                                 builder: (context, double value, widget) {
                                   return Transform.rotate(
                                     angle: value,
@@ -101,7 +102,9 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
                               )
                             : Opacity(
                                 opacity: model.opacity,
-                                child: model.widget,
+                                child: widget.buildler != null
+                                    ? widget.buildler!(model.widget)
+                                    : model.widget,
                               ),
                       )
                     : Container())
@@ -125,11 +128,10 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
             (gkImage.currentContext!.size!.height + widget.previewHeight),
         gkImage.globalPaintBounds!.left);
 
-    animationModel.imageSourceSize = Size(gkImage.currentContext!.size!.width,
-        gkImage.currentContext!.size!.height);
+    animationModel.imageSourceSize =
+        Size(gkImage.currentContext!.size!.width, gkImage.currentContext!.size!.height);
 
-    animationModel.imageDestSize = Size(
-        gkImage.currentContext!.size!.width + widget.previewWidth,
+    animationModel.imageDestSize = Size(gkImage.currentContext!.size!.width + widget.previewWidth,
         gkImage.currentContext!.size!.height + widget.previewHeight);
 
     animationModels.add(animationModel);
@@ -144,8 +146,7 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
     await Future.delayed(Duration(milliseconds: 75));
 
     animationModel.curve = widget.previewCurve;
-    animationModel.duration =
-        widget.previewDuration; // This is for preview mode
+    animationModel.duration = widget.previewDuration; // This is for preview mode
     animationModel.animationActive = true; // That's start the animation.
     setState(() {});
 
@@ -153,15 +154,12 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
     // Drag to card animation
     animationModel.curve = widget.dragToCardCurve;
     animationModel.rotation = widget.rotation;
-    animationModel.duration =
-        widget.dragToCardDuration; // this is for add to button mode
+    animationModel.duration = widget.dragToCardDuration; // this is for add to button mode
 
     animationModel.imageDestPoint = Offset(
-        this.widget.gkCart.globalPaintBounds!.top,
-        this.widget.gkCart.globalPaintBounds!.left);
+        this.widget.gkCart.globalPaintBounds!.top, this.widget.gkCart.globalPaintBounds!.left);
 
-    animationModel.imageDestSize = Size(
-        this.widget.gkCart.currentContext!.size!.width,
+    animationModel.imageDestSize = Size(this.widget.gkCart.currentContext!.size!.width,
         this.widget.gkCart.currentContext!.size!.height);
 
     setState(() {});
@@ -173,7 +171,4 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
     await this.widget.gkCart.currentState!.runAnimation();
     return;
   }
-}
-/*
-;
- */
+} 
