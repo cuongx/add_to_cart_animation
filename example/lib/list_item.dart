@@ -9,7 +9,7 @@ class AppListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Image image = Image.asset(
-      "assets/apple.png",
+      "assets/orange.jpg",
       key: imageGlobalKey,
       width: 60,
       height: 60,

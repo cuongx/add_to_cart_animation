@@ -47,7 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
       previewDuration: const Duration(milliseconds: 500),
       previewHeight: 30,
       previewWidth: 30,
-      opacity: 0.85,
+      opacity: 1,
+      buildler: (_) => ClipRRect(
+        borderRadius: BorderRadius.circular(48),
+        child: _,
+      ),
       receiveCreateAddToCardAnimationMethod: (addToCardAnimationMethod) {
         // You can run the animation by addToCardAnimationMethod, just pass trough the the global key of  the image as parameter
         this.runAddToCardAnimation = addToCardAnimationMethod;

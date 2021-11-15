@@ -61,6 +61,8 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
     super.initState();
   }
 
+  Widget child(model) => widget.buildler != null ? widget.buildler!(model.widget) : model.widget;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -89,7 +91,7 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
                             ? TweenAnimationBuilder(
                                 tween: Tween<double>(begin: 0, end: pi * 2),
                                 duration: model.duration,
-                                child: widget.buildler != null ? widget.buildler!(model.widget) : model.widget,
+                                child: child(model),
                                 builder: (context, double value, widget) {
                                   return Transform.rotate(
                                     angle: value,
@@ -102,9 +104,7 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
                               )
                             : Opacity(
                                 opacity: model.opacity,
-                                child: widget.buildler != null
-                                    ? widget.buildler!(model.widget)
-                                    : model.widget,
+                                child: child(model),
                               ),
                       )
                     : Container())
@@ -171,4 +171,4 @@ class _AddToCartAnimationState extends State<AddToCartAnimation> {
     await this.widget.gkCart.currentState!.runAnimation();
     return;
   }
-} 
+}
